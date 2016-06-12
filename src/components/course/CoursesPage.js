@@ -1,5 +1,6 @@
 import React, {PropTypes} from 'react';
 import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
 import * as courseActions from '../../actions/courseActions';
 
 
@@ -22,7 +23,7 @@ class CoursesPage extends React.Component {
   }
 
   onClickSave() {
-    this.props.dispatch(courseActions.createCourse(this.state.course));
+    this.props.actions.createCourse(this.state.course);
   }
 
   courseRow(course, index){
@@ -50,8 +51,9 @@ class CoursesPage extends React.Component {
 }
 
 CoursesPage.propTypes = {
-  dispatch: PropTypes.func.isRequired,
-  courses: PropTypes.array.isRequired
+  // dispatch: PropTypes.func.isRequired,
+  courses: PropTypes.array.isRequired,
+  actions: PropTypes.object.isRequired
 };
 
 function mapStateToProps(state, ownProps) {
@@ -60,4 +62,14 @@ function mapStateToProps(state, ownProps) {
   };
 }
 
-export default connect(mapStateToProps)(CoursesPage);
+function mapDispatchToProps(dispatch){
+  return {
+    //below is a more automatic and terse way of dispatching actions dont forget to import bindActionCreators from redux to use this
+    actions: bindActionCreators(courseActions,dispatch)
+    //below is the manual dispatch
+    // createCourse: course => dispatch(courseActions.createCourse(course))
+  };
+
+}
+
+export default connect(mapStateToProps,mapDispatchToProps)(CoursesPage);
